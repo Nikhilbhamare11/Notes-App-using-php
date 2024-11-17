@@ -10,10 +10,42 @@ $username = "root";
 $password = "";
 $database = "notes";
 // Create a connection
-$conn = mysqli_connect($servername,$username,$password,$database);
+$conn = mysqli_connect($servername,$username,$password);
 //Die if connection was not successful
 if(!$conn){
     die("Sorry we failed to conect:" . mysqli_connect_error());
+}
+else{
+  // echo"Success Connecting to the db";
+}
+
+// SQL query to create the database if it doesn't exist
+$sql = "CREATE DATABASE IF NOT EXISTS `$database`";
+
+// Execute the query to create the database
+if (mysqli_query($conn, $sql)) {
+  // echo "Database '$database' created successfully or already exists.<br>";
+  // Select the database
+  if (!mysqli_select_db($conn, $database)) {
+      die("Error selecting database: " . mysqli_error($conn));
+  }
+}
+else {
+  echo "Error creating database: " . mysqli_error($conn);
+}
+
+// SQL query to create the 'notes' table if it doesn't exist
+$sql = "CREATE TABLE IF NOT EXISTS `notes` (
+  `sno` INT(8) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `title` VARCHAR(255) NOT NULL,
+  `description` TEXT NOT NULL,
+  `tstamp` DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL )";
+
+// Execute the query
+if (mysqli_query($conn, $sql)) {
+  // echo "Table 'threads' created successfully or already exists.<br>";
+} else {
+  echo "Error creating table: " . mysqli_error($conn);
 }
 
 if(isset($_GET['delete'])){
@@ -88,12 +120,12 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
           <input type="hidden" name="snoEdit" id="snoEdit">
           <div class="mb-3">
             <label for="title" class="form-label">Note Title</label>
-            <input type="text" class="form-control" id="titleEdit" name="titleEdit" aria-describedby="emailHelp">
+            <input type="text" class="form-control" id="titleEdit" name="titleEdit" aria-describedby="emailHelp" required>
           </div>
     
           <div class="mb-3">
             <label for="desc" class="form-label">Note Description</label>
-            <textarea class="form-control" id="descriptionEdit" name="descriptionEdit" rows="3"></textarea>
+            <textarea class="form-control" id="descriptionEdit" name="descriptionEdit" rows="3" required></textarea>
           </div>
         </div>
         <div class="modal-footer d-block mr-auto">
@@ -107,7 +139,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
   <nav class="navbar navbar-expand-lg bg-dark border-bottom border-body" data-bs-theme="dark" id="home">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#home"><img src="img.png" height="48px" width="48px" alt="logo"></a>
+      <a class="navbar-brand" href="#home"><img src="img.png" height="48px" width="48px" alt="logo"> MyNotes App</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -164,12 +196,12 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     <form action="/Php Projects/CRUD Project App/index.php" method="post">
       <div class="mb-3">
         <label for="title" class="form-label">Note Title</label>
-        <input type="text" class="form-control" id="title" name="title" aria-describedby="emailHelp">
+        <input type="text" class="form-control" id="title" name="title" aria-describedby="emailHelp" required>
       </div>
 
       <div class="mb-3">
         <label for="desc" class="form-label">Note Description</label>
-        <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+        <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
       </div>
       <button type="submit" class="btn btn-primary">Add Note</button>
     </form>
