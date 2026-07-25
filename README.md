@@ -52,14 +52,6 @@ Through this project, I gained experience in:
 * Frontend and backend integration
 * Project organization
 
-## Future Enhancements
-* User authentication
-* Database integration
-* Edit and delete notes
-* Search functionality
-* Categories and tags
-* Responsive UI improvements
-
 # Author
 
 **Nikhil Bhamare**
